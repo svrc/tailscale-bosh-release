@@ -1,9 +1,0 @@
-
-check process tailscale
-  with pidfile /var/vcap/sys/run/tailscale/tailscale.pid
-  start program "/var/vcap/jobs/tailscale/bin/ctl start"
-  stop program "/var/vcap/jobs/tailscale/bin/ctl stop"
-  group vcap
-
-
-
