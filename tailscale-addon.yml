@@ -1,5 +1,5 @@
 # Manifest documentation is here https://bosh.io/docs/runtime-config
-# This manifest installs the pks-disk-pressure-watch job 
+# This manifest installs the tailscale job 
 ---
 name: tailscale
 
