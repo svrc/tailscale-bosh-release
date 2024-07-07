@@ -1,0 +1,43 @@
+# Manifest documentation is here https://bosh.io/docs/runtime-config
+# This manifest installs the pks-disk-pressure-watch job 
+---
+name: tailscale
+
+releases:
+- name: tailscale
+  version: 0+dev.1
+
+addons:
+  - name: tailscale-router
+    jobs:
+    - name: tailscale
+      release: tailscale
+
+      properties:
+        tailscale:
+          auth_key: tskey-auth-12345
+          tags: "tag:aws-tpcf,tag:router"
+          subnet_routes: "10.0.1.0/24" 
+
+    include: 
+      stemcell:
+      - os: ubuntu-jammy
+      jobs:
+      - name: web
+        release: concourse
+
+  - name: tailscale-member
+    jobs:
+    - name: tailscale
+      release: tailscale
+
+      properties:
+        tailscale:
+          auth_key: tskey-auth-12345
+          tags: "tag:aws-tpcf"
+
+    include:
+      stemcell:
+      - os: ubuntu-jammy
+
+

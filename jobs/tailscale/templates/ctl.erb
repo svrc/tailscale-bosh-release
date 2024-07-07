@@ -1,0 +1,44 @@
+#!/bin/bash
+# vim: set ft=sh
+
+set -e
+
+RUN_DIR=/var/vcap/sys/run/tailscale
+LOG_DIR=/var/vcap/sys/log/tailscale
+PIDFILE=$RUN_DIR/tailscale.pid
+
+case $1 in
+
+  start)
+    mkdir -p $RUN_DIR
+    chown -R vcap:vcap $RUN_DIR
+
+    mkdir -p $LOG_DIR
+    chown -R root:root $LOG_DIR
+
+    echo $$ > $PIDFILE
+
+    exec tailscale up  \
+      <% if_p("subnet_routes") do | subnet_routes |%>
+      --advertise-routes=<%= p("subnet_routes")%> \
+      <% end %>
+      --advertise-tags=<%= p("tags")%> \
+      1>>$LOG_DIR/tailscale.stdout.log \
+      2>>$LOG_DIR/tailscale.stderr.log
+
+    ;;
+
+  stop)
+    if [ -f $PIDFILE ]; then
+      tailscale down
+      systemctl stop tailscaled
+      rm -f $PIDFILE
+    fi
+    ;;
+
+  *)
+    echo "Usage: $0 {start|stop}"
+
+    ;;
+
+esac

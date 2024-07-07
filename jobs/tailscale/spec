@@ -1,0 +1,29 @@
+---
+name: tailscale
+
+templates:
+  pre-start.erb:                bin/pre-start
+  ctl.erb:			bin/ctl
+
+
+packages: []
+
+properties: 
+  tailscale.auth_key:
+    description: |
+      A pre-created reusable auth key on your tailnet. Use the tailscale console or API to generate this.
+
+    default: ~
+
+  tailscale.subnet_routes:
+    description: |
+      Comma delimited subnets you to advertise.  Only one subnet router is active at a time for a given subnet, if more than one BOSH VM has this assigned,
+      it will act as an HA active/passive alternate.
+
+    default: ~
+
+  tailscale.tags:
+    description: |
+      Tailnet tags you want these BOSH VMs to be associated with for access control purposes.
+
+    default: ~
