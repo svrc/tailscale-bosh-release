@@ -3,8 +3,6 @@ name: tailscale
 
 templates:
   pre-start.erb:                bin/pre-start
-  ctl.erb:			bin/ctl
-
 
 packages: []
 

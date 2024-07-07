@@ -10,4 +10,15 @@ echo 'net.ipv4.ip_forward = 1' | tee -a /etc/sysctl.d/99-tailscale.conf
 echo 'net.ipv6.conf.all.forwarding = 1' | tee -a /etc/sysctl.d/99-tailscale.conf
 sysctl -p /etc/sysctl.d/99-tailscale.conf
 <% end %>
+
+systemctl start tailscaled
+
+tailscale up --authkey <%= p("tailscale.auth_key")%> \
+<% if_p("tailscale.subnet_routes") do | subnet_routes | -%>
+--advertise-routes <%= p("tailscale.subnet_routes")%> \
+<% end -%>
+--advertise-tags <%= p("tailscale.tags")%> --accept-routes --reset \
+1>>$LOG_DIR/tailscale.stdout.log \
+2>>$LOG_DIR/tailscale.stderr.log
+
 exit 0
