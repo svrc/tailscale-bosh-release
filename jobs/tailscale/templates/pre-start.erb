@@ -14,6 +14,7 @@ sysctl -p /etc/sysctl.d/99-tailscale.conf
 systemctl start tailscaled
 
 tailscale up --authkey <%= p("tailscale.auth_key")%> \
+--accept-dns=false \
 <% if_p("tailscale.subnet_routes") do | subnet_routes | -%>
 --advertise-routes <%= p("tailscale.subnet_routes")%> \
 <% end -%>
